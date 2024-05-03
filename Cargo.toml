@@ -1,0 +1,30 @@
+[package]
+name = "salient"
+version = "2024.4.1-alpha"
+edition = "2021"
+
+[dependencies]
+log = "0.4"
+env_logger = "0.11"
+anyhow = "1.0"
+rand = "0.8"
+chrono = "0.4"
+minijinja = { version = "2.0", features = ["json"] }
+
+reqwest = "0.11"
+encoding_rs = "0.8"
+
+arrow = "51.0"
+arrow-array = "51.0"
+parquet = "51.0"
+
+mlua = { version = "0.9.7", features = ["lua54", "vendored", "send"] }
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0" }
+tokio = { version = "1.37", features = ["full"] }
+
+hf-hub = "0.3"
+llama-cpp-2 = {version = "0.1", features = ["metal"] }
+
+google-calendar = "0.7"
