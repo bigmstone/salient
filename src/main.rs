@@ -26,7 +26,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
     info!("Starting service");
 
-    let config: Config = toml::from_str(include_str!("../config.toml"))?;
+    let config = Config::new()?;
 
     let worker = Arc::new(SyncMutex::new(AIWorker::new(&config.model)?));
     let task_manager = Arc::new(Mutex::new(TaskManager::new().await?));

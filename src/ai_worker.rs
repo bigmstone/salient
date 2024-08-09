@@ -1,25 +1,3 @@
-// pub mod llm;
-
-// use std::error::Error;
-
-// use {crate::config::Model, llm::Message};
-
-// pub struct AIWorker {
-//     llm: llm::Llm,
-// }
-
-// impl AIWorker {
-//     pub fn new(model: &Model) -> Result<Self, Box<dyn Error>> {
-//         Ok(Self {
-//             llm: llm::Llm::new(model)?,
-//         })
-//     }
-
-//     pub fn eval(&mut self, messages: &[Message]) -> Result<Message, Box<dyn Error>> {
-//         Ok(self.llm.eval(messages)?)
-//     }
-// }
-
 use std::{io::Write, num::NonZeroU32};
 
 use {
@@ -192,10 +170,7 @@ impl AIWorker {
     }
 
     pub fn eval(&mut self, messages: &[Message]) -> Result<Message> {
-        debug!(
-            "Chat Template: {}",
-            &self.model.get_chat_template(2048).unwrap()
-        );
+        debug!("Chat Template: {}", &self.model.get_chat_template(8192)?);
 
         let prompt = self.build_prompt(messages)?;
 
@@ -212,12 +187,13 @@ impl AIWorker {
 
         let ctx = context! {
             add_generation_prompt => true,
-            bos_token => "<|begin_of_text|>",
+            tools_in_user_message => false,
+            // bos_token => "<|begin_of_text|>",
             messages => messages,
         };
 
         let env = Environment::new();
-        Ok(env.render_str(&self.model.get_chat_template(2048)?, ctx)?)
+        Ok(env.render_str(&self.model.get_chat_template(8192)?, ctx)?)
     }
 }
 

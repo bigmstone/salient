@@ -32,5 +32,8 @@ tokio = { version = "1.37", features = ["full"] }
 
 hf-hub = "0.3"
 llama-cpp-2 = { version = "0.1", features = ["metal"] }
+# llama-cpp-2 = { path = "../llama-cpp-rs/llama-cpp-2", features = ["metal"] }
+# llama-cpp-sys-2 = { path = "../llama-cpp-rs/llama-cpp-sys-2", features = ["metal"] }
+
 
 google-calendar = "0.7"

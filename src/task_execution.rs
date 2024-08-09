@@ -12,7 +12,7 @@ use {
     anyhow::Result,
     chrono::Utc,
     cron::Schedule,
-    log::debug,
+    log::{debug, error},
     mlua::{prelude::*, LuaSerdeExt},
     serde_json::Value as JsonValue,
     tokio::{sync::Mutex, task::JoinHandle, time::sleep},
@@ -135,12 +135,26 @@ impl TaskManager {
 
         let task_lua = self.lua.clone();
         tokio::spawn(async move {
-            task_lua
+            let params = {
+                if task.params.is_empty() {
+                    String::from("{}")
+                } else {
+                    task.params
+                }
+            };
+            match task_lua
                 .lock()
                 .await
-                .load(&format!("{}.execute({})", task.task_name, task.params))
+                .load(&format!("pcall({}.execute, {})", task.task_name, params))
                 .exec()
-                .expect("");
+            {
+                Ok(result) => {
+                    debug!("{:?}", result);
+                }
+                Err(e) => {
+                    error!("{}", e);
+                }
+            }
         });
 
         Ok(())

@@ -1,3 +1,5 @@
+local helper = require "helper"
+
 Test = Test or {}
 
 function Test.setup()
@@ -10,16 +12,16 @@ function Test.execute()
         messages = {
             {
                 role = "system",
-                content = [[You are a helpful AI assistant.]]
+                content = helper.build_prompt(helper.functions)
             },
             {
                 role = "user",
-                content = [[Plan a 5 day 4 night trip to Paris, France. Include places to eat and things to do.]]
+                content = [[What's the weather in Ruston, Louisiana today?]]
             }
         }
     }
 
-    results = llm_eval(params)
+    local results = helper.eval(params)
 
-    print(results.content)
+    print(results[#results].content)
 end
